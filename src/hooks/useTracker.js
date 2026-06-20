@@ -1,0 +1,147 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { PLAN } from '../data/plan.js'
+import { loadState, saveState } from '../lib/storage.js'
+import { buildSlots, computeMetrics, dayKey, probId } from '../lib/model.js'
+import { todayStr } from '../lib/dates.js'
+
+export function defaultState() {
+  return {
+    startDate: todayStr(),
+    done: {},      // id -> { done:true, doneDate:"YYYY-MM-DD" }
+    buffers: {},   // phaseIdx -> [ { focus, items:[[t,src,diff,slug],...] }, ... ]
+    notes: {},     // dayKey -> string
+    open: {},      // dayKey -> bool
+    custom: {},    // dayKey -> [ [t,src,diff,slug], ... ]   (user-added problems)
+    contests: [],  // [{ name, date, solved, rank, rating, note }]
+  }
+}
+
+function hydrate() {
+  const saved = loadState()
+  const base = defaultState()
+  if (saved && typeof saved === 'object') {
+    for (const k of Object.keys(saved)) base[k] = saved[k]
+  } else if (!saved) {
+    // brand-new user: open the first day for them
+    base.open['0:p0'] = true
+  }
+  return base
+}
+
+export function useTracker() {
+  const [state, setState] = useState(hydrate)
+
+  // Debounced persistence.
+  const saveT = useRef(null)
+  useEffect(() => {
+    clearTimeout(saveT.current)
+    saveT.current = setTimeout(() => saveState(state), 120)
+    return () => clearTimeout(saveT.current)
+  }, [state])
+
+  const slots = useMemo(() => buildSlots(PLAN, state), [state])
+  const metrics = useMemo(() => computeMetrics(PLAN, state, slots), [state, slots])
+
+  // --- mutators ---------------------------------------------------------
+  const toggleProblem = useCallback((slot, k) => {
+    const id = probId(slot, k)
+    setState((s) => {
+      const done = { ...s.done }
+      if (done[id] && done[id].done) delete done[id]
+      else done[id] = { done: true, doneDate: todayStr() }
+      return { ...s, done }
+    })
+  }, [])
+
+  const toggleDayOpen = useCallback((slot) => {
+    const key = dayKey(slot)
+    setState((s) => ({ ...s, open: { ...s.open, [key]: !s.open[key] } }))
+  }, [])
+
+  const setAllOpen = useCallback((isOpen) => {
+    setState((s) => {
+      const open = {}
+      buildSlots(PLAN, s).forEach((sl) => { open[dayKey(sl)] = isOpen })
+      return { ...s, open }
+    })
+  }, [])
+
+  const setNote = useCallback((slot, value) => {
+    const key = dayKey(slot)
+    setState((s) => ({ ...s, notes: { ...s.notes, [key]: value } }))
+  }, [])
+
+  const addCustomProblem = useCallback((slot, title) => {
+    const t = title.trim()
+    if (!t) return
+    const item = [t, 'LC', 'M', '']
+    setState((s) => {
+      if (slot.kind === 'buffer') {
+        const buffers = { ...s.buffers }
+        const arr = (buffers[slot.phaseIdx] || []).map((b) => ({ ...b, items: [...b.items] }))
+        arr[slot.bufIdx].items.push(item)
+        buffers[slot.phaseIdx] = arr
+        return { ...s, buffers }
+      }
+      const key = dayKey(slot)
+      const custom = { ...s.custom }
+      custom[key] = [...(custom[key] || []), item]
+      return { ...s, custom }
+    })
+  }, [])
+
+  const addBuffer = useCallback((phaseIdx, seedItems, focus) => {
+    setState((s) => {
+      const buffers = { ...s.buffers }
+      const arr = [...(buffers[phaseIdx] || [])]
+      arr.push({
+        focus: focus || 'Catch-up / flex day',
+        items: seedItems && seedItems.length
+          ? seedItems
+          : [['(Add the problems you want to redo here)', 'LC', 'M', '']],
+      })
+      buffers[phaseIdx] = arr
+      return { ...s, buffers }
+    })
+  }, [])
+
+  const carryOver = useCallback((slot) => {
+    const unsolved = []
+    slot.items.forEach((it, k) => {
+      const r = state.done[probId(slot, k)]
+      if (!(r && r.done) && !/^[↻🏔🛟]/.test(it[0])) unsolved.push([it[0], it[1], it[2], it[3]])
+    })
+    if (!unsolved.length) return 0
+    addBuffer(slot.phaseIdx, unsolved, 'Carry-over from: ' + slot.focus)
+    return unsolved.length
+  }, [state, addBuffer])
+
+  const setStartDate = useCallback((date) => {
+    setState((s) => ({ ...s, startDate: date }))
+  }, [])
+
+  // --- contests ---------------------------------------------------------
+  const addContest = useCallback((c) => {
+    setState((s) => ({ ...s, contests: [...s.contests, c] }))
+  }, [])
+
+  const removeContest = useCallback((idx) => {
+    setState((s) => ({ ...s, contests: s.contests.filter((_, i) => i !== idx) }))
+  }, [])
+
+  // --- backup / reset ---------------------------------------------------
+  const importState = useCallback((data) => {
+    setState({ ...defaultState(), ...data })
+  }, [])
+
+  const resetAll = useCallback(() => {
+    setState(defaultState())
+  }, [])
+
+  return {
+    state, slots, metrics,
+    toggleProblem, toggleDayOpen, setAllOpen, setNote,
+    addCustomProblem, addBuffer, carryOver, setStartDate,
+    addContest, removeContest, importState, resetAll,
+  }
+}

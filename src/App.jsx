@@ -1,0 +1,64 @@
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useTracker } from './hooks/useTracker.js'
+import { HAS_LS } from './lib/storage.js'
+import TopBar from './components/TopBar.jsx'
+import Dashboard from './components/Dashboard.jsx'
+import PlanView from './components/PlanView.jsx'
+import Contests from './components/Contests.jsx'
+import Deploy from './components/Deploy.jsx'
+
+export default function App() {
+  const tracker = useTracker()
+  const { state, slots, metrics } = tracker
+  const [view, setViewRaw] = useState('dash')
+
+  const setView = useCallback((v) => {
+    setViewRaw(v)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [])
+
+  // imperative toast
+  const [toastMsg, setToastMsg] = useState('')
+  const toastT = useRef(null)
+  const toast = useCallback((msg) => {
+    setToastMsg(msg)
+    clearTimeout(toastT.current)
+    toastT.current = setTimeout(() => setToastMsg(''), 2200)
+  }, [])
+  useEffect(() => () => clearTimeout(toastT.current), [])
+
+  const actions = tracker
+
+  return (
+    <>
+      <TopBar view={view} setView={setView} metrics={metrics} />
+      <main>
+        {!HAS_LS && (
+          <div className="note-banner">
+            ⚠ This environment can't save to your browser, so progress will reset on reload.
+            Once you <b>build &amp; deploy this app</b> (or run it locally), your progress saves automatically.
+          </div>
+        )}
+
+        {view === 'dash' && (
+          <Dashboard
+            metrics={metrics}
+            startDate={state.startDate}
+            slots={slots}
+            state={state}
+            onGoToPlan={() => setView('plan')}
+          />
+        )}
+        {view === 'plan' && <PlanView slots={slots} state={state} actions={actions} toast={toast} />}
+        {view === 'contests' && <Contests contests={state.contests} actions={actions} toast={toast} />}
+        {view === 'deploy' && <Deploy state={state} actions={actions} toast={toast} />}
+      </main>
+
+      <footer>
+        Built for <b>Rahul Raj</b> · Core curriculum cross-mapped to <b>LeetCode</b> &amp; <b>GeeksforGeeks</b> · <b>Day 1 = your start date</b> · Good luck on the climb. 🏔
+      </footer>
+
+      <div id="toast" className={toastMsg ? 'show' : ''}>{toastMsg}</div>
+    </>
+  )
+}
