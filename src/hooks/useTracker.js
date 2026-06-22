@@ -21,6 +21,7 @@ export function defaultState() {
       notes: {},     // theoryDayKey -> string
       open: {},      // theoryDayKey -> bool
     },
+    hardDone: {},    // hard-extra problem url -> true (tracked separately; NOT counted in planner metrics)
   }
 }
 
@@ -37,6 +38,7 @@ function hydrate() {
   }
   // existing DSA users may have saved state before theory existed
   if (!base.theory) base.theory = { done: {}, notes: {}, open: {} }
+  if (!base.hardDone) base.hardDone = {}
   return base
 }
 
@@ -188,6 +190,16 @@ export function useTracker() {
     setState(defaultState())
   }, [])
 
+  // --- hard extras (tracked separately; excluded from planner metrics) ---
+  const toggleHard = useCallback((url) => {
+    setState((s) => {
+      const hardDone = { ...(s.hardDone || {}) }
+      if (hardDone[url]) delete hardDone[url]
+      else hardDone[url] = true
+      return { ...s, hardDone }
+    })
+  }, [])
+
   return {
     state, slots, metrics,
     toggleProblem, toggleDayOpen, setAllOpen, setNote,
@@ -195,5 +207,6 @@ export function useTracker() {
     addContest, removeContest, importState, resetAll,
     theorySlots, theoryMetrics,
     toggleConcept, toggleTheoryDayOpen, setAllTheoryOpen, setTheoryNote,
+    toggleHard,
   }
 }

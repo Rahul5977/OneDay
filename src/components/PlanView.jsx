@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { PLAN } from '../data/plan.js'
 import { addDays, fmtShort } from '../lib/dates.js'
 import { dayKey, probId } from '../lib/model.js'
+import { HARD_BY_KEY } from '../data/hard/index.js'
 import DayCard from './DayCard.jsx'
 
 const FILTERS = [
@@ -78,6 +79,7 @@ export default function PlanView({ slots, state, actions, toast }) {
             isOpen={!!state.open[dayKey(s)] || (!!q)}
             actions={actions}
             toast={toast}
+            hard={s.kind === 'plan' ? (HARD_BY_KEY[phase.name + '||' + s.focus] || []) : []}
           />
         ))}
 

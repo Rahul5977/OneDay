@@ -3,7 +3,7 @@ import { fmt, isSunday, todayStr } from '../lib/dates.js'
 import { dayKey, probId } from '../lib/model.js'
 import Problem from './Problem.jsx'
 
-export default function DayCard({ slot, date, gIndex, state, isOpen, actions, toast }) {
+export default function DayCard({ slot, date, gIndex, state, isOpen, actions, toast, hard = [] }) {
   const key = dayKey(slot)
   const [showNote, setShowNote] = useState(!!state.notes[key])
   const [showAdd, setShowAdd] = useState(false)
@@ -60,6 +60,30 @@ export default function DayCard({ slot, date, gIndex, state, isOpen, actions, to
               onToggle={() => actions.toggleProblem(slot, k)}
             />
           ))}
+
+          {hard.length > 0 && (
+            <div className="hardx">
+              <div className="hardx-title">🔥 Hard extras <span>· optional · {hard.filter((p) => state.hardDone && state.hardDone[p.url]).length}/{hard.length} · not counted in your plan</span></div>
+              {hard.map((p) => {
+                const done = !!(state.hardDone && state.hardDone[p.url])
+                return (
+                  <div className={'hardx-row' + (done ? ' done' : '')} key={p.url}>
+                    <span
+                      className={'cb' + (done ? ' ck' : '')}
+                      role="checkbox"
+                      aria-checked={done}
+                      tabIndex={0}
+                      onClick={() => actions.toggleHard(p.url)}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); actions.toggleHard(p.url) } }}
+                    />
+                    <span className={'hardx-plat plat-' + p.platform.toLowerCase()}>{p.platform}</span>
+                    <a className="hardx-link" href={p.url} target="_blank" rel="noreferrer">{p.title}</a>
+                    {p.tag && <span className="hardx-tag">{p.tag}</span>}
+                  </div>
+                )
+              })}
+            </div>
+          )}
 
           <div className="day-tools">
             <button className="tbtn" onClick={() => setShowNote((v) => !v)}>✎ Note</button>
