@@ -61,7 +61,7 @@ export default function App() {
           />
         )}
         {view === 'combined' && (
-          <CombinedView dsaSlots={slots} theorySlots={theorySlots} state={state} actions={actions} toast={toast} />
+          <CombinedView dsaSlots={slots} theorySlots={theorySlots} state={state} setView={setView} />
         )}
         {view === 'dsa' && <PlanView slots={slots} state={state} actions={actions} toast={toast} />}
         {THEORY_KEYS.includes(view) && (

@@ -358,10 +358,28 @@ footer b{color:var(--txt-dim)}
 .combined{display:flex;flex-direction:column;gap:18px}
 .combined-row{display:flex;flex-direction:column;gap:6px}
 .combined-daylabel{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--txt-faint)}
-.combined-pair{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+.combined-pair{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch}
 .combined-cell{min-width:0}
 .combined-cell .day{margin-bottom:0}
 .combined-rest{border:1.5px dashed var(--line-2);border-radius:var(--r);padding:18px;color:var(--txt-faint);font-size:12.5px;text-align:center;background:transparent}
+
+/* combined tiles — fixed-height, never expand inline (open the subject tab) */
+.ctile{display:flex;align-items:center;gap:13px;width:100%;text-align:left;padding:13px 15px;border:1px solid var(--line);border-radius:var(--r);background:linear-gradient(180deg,var(--ink-2),var(--ink));transition:border-color .16s,transform .12s}
+.ctile:hover:not(:disabled){border-color:var(--line-2);transform:translateY(-1px)}
+.ctile.done{border-color:rgba(66,226,160,.4)}
+.ctile.stub{opacity:.72}
+.ctile.rest{justify-content:center;border-style:dashed;cursor:default;background:transparent}
+.ctile-rest{color:var(--txt-faint);font-size:12.5px}
+.ctile .daynum{flex-shrink:0;width:30px;height:30px;border-radius:9px;background:var(--ink-3);border:1px solid var(--line-2);display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--txt-dim)}
+.ctile.done .daynum{background:rgba(66,226,160,.14);border-color:rgba(66,226,160,.4);color:var(--mint)}
+.ctile-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.ctile-focus{font-size:13.5px;font-weight:500;color:var(--txt);display:flex;align-items:center;gap:7px;min-width:0}
+.ctile-focus .subj-badge{flex-shrink:0}
+.ctile-date{font-size:11px;color:var(--txt-faint);font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:6px}
+.ctile-mini{flex-shrink:0;display:flex;align-items:center;gap:9px}
+.ctile-mini .minibar{width:54px}
+.ctile .open-chev{color:var(--txt-faint);font-size:16px}
+.ctile:hover:not(:disabled) .open-chev{color:var(--peri)}
 
 /* subjects progress strip (dashboard) */
 .subjects-panel{margin-bottom:22px}
