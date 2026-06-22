@@ -544,7 +544,7 @@ export const DAYS = [
           { label: 'Engineering Digest — LLD playlist', url: 'https://www.youtube.com/@EngineeringDigest' },
         ],
         links: [
-          { label: 'awesome-low-level-design — logging-system.md', url: 'https://github.com/ashishps1/awesome-low-level-design/blob/main/problems/logging-system.md' },
+          { label: 'awesome-low-level-design — logging-framework.md', url: 'https://github.com/ashishps1/awesome-low-level-design/blob/main/problems/logging-framework.md' },
           { label: 'Refactoring Guru — Chain of Responsibility', url: 'https://refactoring.guru/design-patterns/chain-of-responsibility' },
         ],
         interview: [
@@ -660,7 +660,7 @@ export const DAYS = [
           { label: 'Engineering Digest — LLD playlist', url: 'https://www.youtube.com/@EngineeringDigest' },
         ],
         links: [
-          { label: 'awesome-low-level-design — notification-system.md', url: 'https://github.com/ashishps1/awesome-low-level-design/blob/main/problems/notification-system.md' },
+          { label: 'awesome-low-level-design — pub-sub-system.md', url: 'https://github.com/ashishps1/awesome-low-level-design/blob/main/problems/pub-sub-system.md' },
           { label: 'Refactoring Guru — Observer pattern', url: 'https://refactoring.guru/design-patterns/observer' },
         ],
         interview: [

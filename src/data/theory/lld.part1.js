@@ -90,7 +90,7 @@ export const DAYS = [
         ],
         links: [
           { label: 'GeeksforGeeks — Association, composition, aggregation', url: 'https://www.geeksforgeeks.org/association-composition-aggregation-java/' },
-          { label: 'Baeldung — Composition vs aggregation', url: 'https://www.baeldung.com/cs/aggregation-vs-composition' },
+          { label: 'GeeksforGeeks — Aggregation vs composition', url: 'https://www.geeksforgeeks.org/association-composition-and-aggregation-in-java/' },
         ],
         interview: [
           { q: 'What is the difference between aggregation and composition?', a: 'Both are whole-part associations, but composition is exclusive ownership with a shared lifecycle — the part cannot exist without the whole and dies with it (House–Room). Aggregation is a weaker whole-part where the part has an independent lifetime and can be shared (Department–Professor). UML: filled diamond for composition, hollow diamond for aggregation.' },
@@ -660,7 +660,7 @@ Customer  │             │         ▼
         ],
         links: [
           { label: 'GeeksforGeeks — DRY, KISS, YAGNI', url: 'https://www.geeksforgeeks.org/software-engineering/dry-kiss-yagni-principles/' },
-          { label: 'refactoring.guru — Design principles', url: 'https://refactoring.guru/design-patterns/design-principles' },
+          { label: 'GeeksforGeeks — Software design principles', url: 'https://www.geeksforgeeks.org/software-design-principles/' },
         ],
         interview: [
           { q: 'What is the DRY principle?', a: 'Don\'t Repeat Yourself: every piece of knowledge should have one authoritative representation. Duplicated logic forces multi-place edits and drifts into bugs, so you extract it into a single function, class, or constant.' },

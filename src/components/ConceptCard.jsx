@@ -1,19 +1,11 @@
 import { useState } from 'react'
 import { fmt, isSunday, todayStr } from '../lib/dates.js'
 import { theoryDayKey } from '../lib/theoryModel.js'
+import ConceptModal from './ConceptModal.jsx'
 
-function Concept({ concept, isDone, onToggle }) {
-  const [open, setOpen] = useState(false)
-  const [openQ, setOpenQ] = useState(-1)
-  const paras = (concept.explanation || '').split('\n\n').filter((p) => p.trim())
-  const keyPoints = concept.keyPoints || []
-  const links = concept.links || []
-  const videos = concept.videos || []
-  const diagram = concept.diagram || ''
-  const interview = concept.interview || []
-
+function Concept({ concept, isDone, onToggle, onOpen }) {
   return (
-    <div className={'concept' + (isDone ? ' solved' : '') + (open ? ' open' : '')}>
+    <div className={'concept' + (isDone ? ' solved' : '')}>
       <div className="concept-head">
         <span
           className={'cb' + (isDone ? ' ck' : '')}
@@ -23,72 +15,18 @@ function Concept({ concept, isDone, onToggle }) {
           onClick={onToggle}
           onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle() } }}
         />
-        <div className="concept-info" onClick={() => setOpen((v) => !v)}>
+        <div
+          className="concept-info"
+          role="button"
+          tabIndex={0}
+          onClick={onOpen}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onOpen() } }}
+        >
           <div className="concept-topic">{concept.topic}</div>
           {concept.summary && <div className="concept-summary">{concept.summary}</div>}
         </div>
-        <span className="chev" onClick={() => setOpen((v) => !v)}>⌄</span>
+        <span className="chev open-chev" onClick={onOpen} aria-hidden="true">›</span>
       </div>
-
-      {open && (
-        <div className="concept-body">
-          {paras.map((p, i) => (
-            <p key={i} className="concept-para">{p}</p>
-          ))}
-
-          {diagram && (
-            <div className="concept-diagram-wrap">
-              <div className="concept-diagram-label">▦ Diagram</div>
-              <pre className="concept-diagram">{diagram}</pre>
-            </div>
-          )}
-
-          {keyPoints.length > 0 && (
-            <ul className="concept-keys">
-              {keyPoints.map((kp, i) => (
-                <li key={i}>{kp}</li>
-              ))}
-            </ul>
-          )}
-
-          {videos.length > 0 && (
-            <div className="concept-media">
-              <div className="concept-media-label">📺 Watch</div>
-              <div className="concept-links">
-                {videos.map((v, i) => (
-                  <a key={i} href={v.url} target="_blank" rel="noreferrer" className="concept-link vid">▶ {v.label}</a>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {links.length > 0 && (
-            <div className="concept-media">
-              <div className="concept-media-label">📖 Read</div>
-              <div className="concept-links">
-                {links.map((l, i) => (
-                  <a key={i} href={l.url} target="_blank" rel="noreferrer" className="concept-link">↗ {l.label}</a>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {interview.length > 0 && (
-            <div className="qa">
-              <div className="qa-title">Interview Q&amp;A</div>
-              {interview.map((qa, i) => (
-                <div key={i} className={'qa-item' + (openQ === i ? ' open' : '')}>
-                  <button className="qa-q" onClick={() => setOpenQ((v) => (v === i ? -1 : i))}>
-                    <span className="chev">⌄</span>
-                    <span>{qa.q}</span>
-                  </button>
-                  {openQ === i && <div className="qa-a">{qa.a}</div>}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
     </div>
   )
 }
@@ -96,6 +34,7 @@ function Concept({ concept, isDone, onToggle }) {
 export default function ConceptCard({ slot, date, gIndex, state, isOpen, actions, toast }) {
   const key = theoryDayKey(slot)
   const [showNote, setShowNote] = useState(!!(state.theory.notes && state.theory.notes[key]))
+  const [activeId, setActiveId] = useState(null)
 
   const concepts = slot.concepts || []
   const isStub = concepts.length === 0
@@ -145,6 +84,7 @@ export default function ConceptCard({ slot, date, gIndex, state, isOpen, actions
               concept={c}
               isDone={!!(state.theory.done[c.id] && state.theory.done[c.id].done)}
               onToggle={() => actions.toggleConcept(c.id)}
+              onOpen={() => setActiveId(c.id)}
             />
           ))}
 
@@ -163,6 +103,19 @@ export default function ConceptCard({ slot, date, gIndex, state, isOpen, actions
           )}
         </div>
       )}
+
+      {activeId && (() => {
+        const c = concepts.find((x) => x.id === activeId)
+        if (!c) return null
+        return (
+          <ConceptModal
+            concept={c}
+            isDone={!!(state.theory.done[c.id] && state.theory.done[c.id].done)}
+            onToggle={() => actions.toggleConcept(c.id)}
+            onClose={() => setActiveId(null)}
+          />
+        )
+      })()}
     </div>
   )
 }

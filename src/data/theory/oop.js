@@ -158,7 +158,7 @@ export const DAYS = [
         ],
         links: [
           { label: 'GeeksforGeeks', url: 'https://www.geeksforgeeks.org/differences-between-procedural-and-object-oriented-programming/' },
-          { label: 'Javatpoint', url: 'https://www.javatpoint.com/java-oops-concepts' },
+          { label: 'GeeksforGeeks — OOP intro', url: 'https://www.geeksforgeeks.org/introduction-of-object-oriented-programming/' },
         ],
         interview: [
           { q: 'What is the difference between procedural and object-oriented programming?', a: 'Procedural programming organizes code as functions that operate on separate, often global, data and follows a top-down sequence of steps. OOP organizes code around objects that bundle data with the methods acting on it, hiding internals and following a bottom-up, entity-centric design.' },
@@ -242,7 +242,7 @@ export const DAYS = [
         ],
         links: [
           { label: 'GeeksforGeeks', url: 'https://www.geeksforgeeks.org/access-modifiers-java/' },
-          { label: 'Javatpoint', url: 'https://www.javatpoint.com/access-modifiers' },
+          { label: 'GeeksforGeeks — Access modifiers', url: 'https://www.geeksforgeeks.org/access-modifiers-in-java/' },
         ],
         interview: [
           { q: 'What are the access modifiers in Java?', a: 'private (same class only), default/package-private (same package), protected (same package plus subclasses in other packages), and public (accessible everywhere). They control the visibility of classes and members.' },
@@ -372,7 +372,7 @@ export const DAYS = [
         ],
         links: [
           { label: 'GeeksforGeeks', url: 'https://www.geeksforgeeks.org/types-of-inheritance-in-java/' },
-          { label: 'Javatpoint', url: 'https://www.javatpoint.com/inheritance-in-java' },
+          { label: 'GeeksforGeeks — Inheritance', url: 'https://www.geeksforgeeks.org/inheritance-in-java/' },
         ],
         interview: [
           { q: 'What are the types of inheritance?', a: 'Single (one base), multilevel (a chain A→B→C), hierarchical (many subclasses of one base), multiple (one class with several bases), and hybrid (a combination of these forms).' },
@@ -703,7 +703,7 @@ export const DAYS = [
         ],
         links: [
           { label: 'GeeksforGeeks', url: 'https://www.geeksforgeeks.org/difference-between-abstract-class-and-interface-in-java/' },
-          { label: 'Javatpoint', url: 'https://www.javatpoint.com/difference-between-abstract-class-and-interface' },
+          { label: 'GeeksforGeeks — Abstract class vs interface', url: 'https://www.geeksforgeeks.org/difference-between-abstract-class-and-interface-in-java/' },
         ],
         interview: [
           { q: 'What is the difference between an abstract class and an interface?', a: 'An abstract class can have instance state, constructors, and a mix of abstract and concrete methods, and a class can extend only one. An interface is a contract with no instance state (only constants), and a class can implement many. Abstract class models IS-A with shared implementation; interface models a CAN-DO capability.' },
@@ -750,7 +750,7 @@ export const DAYS = [
         ],
         links: [
           { label: 'GeeksforGeeks', url: 'https://www.geeksforgeeks.org/understanding-encapsulation-inheritance-polymorphism-abstraction-in-oops/' },
-          { label: 'Programiz', url: 'https://www.programiz.com/java-programming/oop' },
+          { label: 'GeeksforGeeks — Four pillars', url: 'https://www.geeksforgeeks.org/introduction-of-object-oriented-programming/' },
         ],
         interview: [
           { q: 'What are the four pillars of OOP?', a: 'Encapsulation (bundling data with methods and hiding state), abstraction (exposing essentials and hiding complexity), inheritance (reusing and extending via IS-A relationships), and polymorphism (one interface, many forms via overloading/overriding).' },
@@ -874,7 +874,7 @@ export const DAYS = [
         ],
         links: [
           { label: 'GeeksforGeeks', url: 'https://www.geeksforgeeks.org/solid-principle-in-programming-understand-with-real-life-examples/' },
-          { label: 'refactoring.guru', url: 'https://refactoring.guru/design-principles' },
+          { label: 'GeeksforGeeks — SOLID', url: 'https://www.geeksforgeeks.org/solid-principle-in-programming-understand-with-real-life-examples/' },
         ],
         interview: [
           { q: 'What does SOLID stand for?', a: 'Single Responsibility Principle, Open/Closed Principle, Liskov Substitution Principle, Interface Segregation Principle, and Dependency Inversion Principle. They are five OOP design principles for maintainable, extensible code.' },
@@ -955,7 +955,7 @@ export const DAYS = [
         ],
         links: [
           { label: 'GeeksforGeeks', url: 'https://www.geeksforgeeks.org/dependency-inversion-principle-solid/' },
-          { label: 'refactoring.guru', url: 'https://refactoring.guru/design-principles' },
+          { label: 'GeeksforGeeks — SOLID', url: 'https://www.geeksforgeeks.org/solid-principle-in-programming-understand-with-real-life-examples/' },
         ],
         interview: [
           { q: 'What is the Dependency Inversion Principle?', a: 'High-level modules should not depend on low-level modules; both should depend on abstractions. And abstractions should not depend on details; details should depend on abstractions. This decouples policy from concrete implementations.' },
