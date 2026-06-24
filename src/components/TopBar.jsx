@@ -9,6 +9,8 @@ const TABS = [
   ['cn', 'CN'],
   ['oop', 'OOP'],
   ['lld', 'LLD'],
+  ['jslab', 'JS Lab'],
+  ['sqllab', 'SQL Lab'],
   ['contests', 'Contests'],
 ]
 

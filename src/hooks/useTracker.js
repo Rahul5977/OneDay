@@ -4,6 +4,8 @@ import { loadState, saveState } from '../lib/storage.js'
 import { buildSlots, computeMetrics, dayKey, probId } from '../lib/model.js'
 import { SUBJECTS } from '../data/theory/index.js'
 import { buildTheorySlots, computeTheoryMetrics, conceptId, theoryDayKey } from '../lib/theoryModel.js'
+import { LABS } from '../data/labs/index.js'
+import { buildLabSlots, computeLabMetrics, labSectionKey } from '../lib/labsModel.js'
 import { todayStr } from '../lib/dates.js'
 
 export function defaultState() {
@@ -20,6 +22,11 @@ export function defaultState() {
       done: {},      // conceptId -> { done:true, doneDate:"YYYY-MM-DD" }
       notes: {},     // theoryDayKey -> string
       open: {},      // theoryDayKey -> bool
+    },
+    labs: {          // independent practice trackers (JS Lab, SQL Lab)
+      done: {},      // challengeId -> { done:true, doneDate:"YYYY-MM-DD" }
+      notes: {},     // labSectionKey -> string
+      open: {},      // labSectionKey -> bool
     },
     hardDone: {},    // hard-extra problem url -> true (tracked separately; NOT counted in planner metrics)
   }
@@ -38,6 +45,7 @@ function hydrate() {
   }
   // existing DSA users may have saved state before theory existed
   if (!base.theory) base.theory = { done: {}, notes: {}, open: {} }
+  if (!base.labs) base.labs = { done: {}, notes: {}, open: {} }
   if (!base.hardDone) base.hardDone = {}
   return base
 }
@@ -60,6 +68,12 @@ export function useTracker() {
   const theoryMetrics = useMemo(
     () => computeTheoryMetrics(SUBJECTS, state.theory, theorySlots, state.startDate),
     [state, theorySlots],
+  )
+
+  const labSlots = useMemo(() => buildLabSlots(LABS), [])
+  const labMetrics = useMemo(
+    () => computeLabMetrics(LABS, state.labs, labSlots, state.startDate),
+    [state, labSlots],
   )
 
   // --- mutators ---------------------------------------------------------
@@ -117,6 +131,36 @@ export function useTracker() {
   const setTheoryNote = useCallback((slot, value) => {
     const key = theoryDayKey(slot)
     setState((s) => ({ ...s, theory: { ...s.theory, notes: { ...s.theory.notes, [key]: value } } }))
+  }, [])
+
+  // --- lab mutators (JS Lab / SQL Lab) ----------------------------------
+  const toggleChallenge = useCallback((id) => {
+    setState((s) => {
+      const done = { ...s.labs.done }
+      if (done[id] && done[id].done) delete done[id]
+      else done[id] = { done: true, doneDate: todayStr() }
+      return { ...s, labs: { ...s.labs, done } }
+    })
+  }, [])
+
+  const toggleLabSectionOpen = useCallback((slot) => {
+    const key = labSectionKey(slot)
+    setState((s) => ({ ...s, labs: { ...s.labs, open: { ...s.labs.open, [key]: !s.labs.open[key] } } }))
+  }, [])
+
+  const setAllLabOpen = useCallback((labKey, isOpen) => {
+    setState((s) => {
+      const open = { ...s.labs.open }
+      buildLabSlots(LABS).forEach((sl) => {
+        if (sl.labKey === labKey) open[labSectionKey(sl)] = isOpen
+      })
+      return { ...s, labs: { ...s.labs, open } }
+    })
+  }, [])
+
+  const setLabNote = useCallback((slot, value) => {
+    const key = labSectionKey(slot)
+    setState((s) => ({ ...s, labs: { ...s.labs, notes: { ...s.labs.notes, [key]: value } } }))
   }, [])
 
   const addCustomProblem = useCallback((slot, title) => {
@@ -207,6 +251,8 @@ export function useTracker() {
     addContest, removeContest, importState, resetAll,
     theorySlots, theoryMetrics,
     toggleConcept, toggleTheoryDayOpen, setAllTheoryOpen, setTheoryNote,
+    labSlots, labMetrics,
+    toggleChallenge, toggleLabSectionOpen, setAllLabOpen, setLabNote,
     toggleHard,
   }
 }

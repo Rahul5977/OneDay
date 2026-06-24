@@ -6,14 +6,16 @@ import Dashboard from "./components/Dashboard.jsx";
 import PlanView from "./components/PlanView.jsx";
 import CombinedView from "./components/CombinedView.jsx";
 import TheoryView from "./components/TheoryView.jsx";
+import LabView from "./components/LabView.jsx";
 import Contests from "./components/Contests.jsx";
 import Onboarding from "./components/Onboarding.jsx";
 
 const THEORY_KEYS = ["os", "dbms", "cn", "oop", "lld"];
+const LAB_KEYS = ["jslab", "sqllab"];
 
 export default function App() {
   const tracker = useTracker();
-  const { state, slots, metrics, theorySlots, theoryMetrics } = tracker;
+  const { state, slots, metrics, theorySlots, theoryMetrics, labSlots, labMetrics } = tracker;
   const [view, setViewRaw] = useState("dash");
 
   const setView = useCallback((v) => {
@@ -92,6 +94,16 @@ export default function App() {
             theoryMetrics={theoryMetrics}
             actions={actions}
             toast={toast}
+          />
+        )}
+        {LAB_KEYS.includes(view) && (
+          <LabView
+            key={view}
+            labKey={view}
+            slots={labSlots}
+            state={state}
+            labMetrics={labMetrics}
+            actions={actions}
           />
         )}
         {view === "contests" && (

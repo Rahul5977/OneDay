@@ -447,3 +447,48 @@ footer b{color:var(--txt-dim)}
   main{padding:24px 16px 80px}
   .mobnav{display:flex}
 }
+
+/* ---------- practice labs (JS Lab / SQL Lab) ---------- */
+/* difficulty chip variants (E/M/H/X) — used in both list and modal */
+.diff.d-E,.diff.d-M,.diff.d-H,.diff.d-X{display:inline-block;width:auto;min-width:16px;margin-right:8px;padding:2px 6px;border-radius:5px;font-size:9.5px;vertical-align:middle}
+.diff.d-E{color:var(--mint);background:rgba(66,226,160,.12);border:1px solid rgba(66,226,160,.3)}
+.diff.d-M{color:var(--amber-soft);background:rgba(255,157,60,.12);border:1px solid rgba(255,157,60,.3)}
+.diff.d-H{color:var(--rose-soft);background:rgba(255,122,138,.12);border:1px solid rgba(255,122,138,.3)}
+.diff.d-X{color:var(--peri-soft);background:rgba(138,155,255,.14);border:1px solid rgba(138,155,255,.34)}
+
+.lab-modal-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.lab-diff{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:6px}
+.lab-diff.d-E{color:var(--mint);background:rgba(66,226,160,.12);border:1px solid rgba(66,226,160,.3)}
+.lab-diff.d-M{color:var(--amber-soft);background:rgba(255,157,60,.12);border:1px solid rgba(255,157,60,.3)}
+.lab-diff.d-H{color:var(--rose-soft);background:rgba(255,122,138,.12);border:1px solid rgba(255,122,138,.3)}
+.lab-diff.d-X{color:var(--peri-soft);background:rgba(138,155,255,.14);border:1px solid rgba(138,155,255,.34)}
+.lab-tag{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.04em;color:var(--txt-faint);background:var(--ink-3);border:1px solid var(--line-2);padding:2px 7px;border-radius:5px}
+
+.lab-sec-label{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin:18px 0 4px}
+.cm-body .lab-sec-label:first-child{margin-top:10px}
+
+/* code / schema blocks */
+.lab-code{font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.55;color:var(--txt);background:var(--ink-3);border:1px solid var(--line-2);border-radius:10px;padding:13px 15px;overflow-x:auto;white-space:pre;tab-size:2}
+.lab-code.sol{border-color:rgba(66,226,160,.32);background:rgba(66,226,160,.05)}
+
+/* examples */
+.lab-examples{margin-top:14px}
+.lab-example{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--ink-2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;margin-bottom:6px;line-height:1.6;overflow-x:auto}
+.lab-example code{color:var(--txt);white-space:pre}
+.lab-ex-k{color:var(--txt-faint);margin-right:8px;user-select:none}
+.lab-ex-note{color:var(--txt-dim);font-family:'Inter',sans-serif;font-size:12px;margin-top:3px}
+
+/* hints */
+.lab-hints{margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
+.lab-hint{font-size:12.5px;color:var(--txt-dim);background:rgba(255,157,60,.07);border:1px solid rgba(255,157,60,.22);border-left:3px solid var(--amber);border-radius:8px;padding:9px 12px;margin-bottom:7px;line-height:1.55}
+.lab-hint b{color:var(--amber-soft)}
+.lab-hints .tbtn{margin-top:2px}
+
+/* solution reveal */
+.lab-solution-block{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+.reveal-btn{width:100%;padding:12px;border-radius:10px;background:linear-gradient(180deg,var(--ink-3),var(--ink-2));border:1px dashed var(--line-2);color:var(--mint-soft);font-size:13px;font-weight:600;letter-spacing:.01em;transition:.15s;cursor:pointer}
+.reveal-btn:hover{border-color:var(--mint);color:var(--mint)}
+
+.lab-pitfalls{margin-top:14px}
+.concept-keys.danger li::before{content:'▸';color:var(--rose)}
+.concept-keys.danger li{color:var(--txt-dim)}
